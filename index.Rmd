@@ -15,6 +15,6 @@ output:
   postcards::jolla
 ---
  
-I am a classically trained banana living in the Cinnamon Bay Area. 
-Currently I work on the Octopus team at Flapjack. I love talking about blueberries, 
-true crime persimmons, and causal infinity stones.
+Hi there.
+I'm a lab technician and graduate student at UCSB.
+I love to SCUBA dive, fish, surf, and take naps with my cat
