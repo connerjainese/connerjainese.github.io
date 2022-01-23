@@ -10,6 +10,4 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
-    - text: "Conner"
-    - href: conner.html
 output: distill::distill_article
