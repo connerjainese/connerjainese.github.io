@@ -1,18 +1,19 @@
 ---
-title: "mfeo"
-description: |
-  Welcome to the website. I hope you enjoy it!
-site: distill::distill_website
+title: "Conner Jainese"
+image: "conner.jpg"
+links:
+  - label: LinkedIn
+    url: ""
+  - label: Twitter
+    url: ""
+  - label: GitHub
+    url: ""
+  - label: Email
+    url: ""
+output:
+  postcards::jolla
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-
-# Learn more about creating websites with Distill at:
-# https://rstudio.github.io/distill/website.html
-
-# Learn more about publishing to GitHub Pages at:
-# https://rstudio.github.io/distill/publish_website.html#github-pages
-
-```
-
+ 
+I am a classically trained banana living in the Cinnamon Bay Area. 
+Currently I work on the Octopus team at Flapjack. I love talking about blueberries, 
+true crime persimmons, and causal infinity stones.

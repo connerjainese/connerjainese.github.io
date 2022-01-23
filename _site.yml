@@ -3,6 +3,7 @@ title: "WOW"
 description: |
   wow
 output_dir: "docs"
+theme: postcards.css
 navbar:
   right:
     - text: "Home"
