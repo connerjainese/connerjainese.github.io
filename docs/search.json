@@ -6,23 +6,15 @@
       "description": "Some additional details about the website",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-01-22T18:40:15-08:00"
-    },
-    {
-      "path": "conner.html",
-      "title": "Conner Jainese",
-      "author": [],
-      "contents": "\r\n\r\n          \r\n          \r\n          WOW\r\n          \r\n          \r\n          Home\r\n          About\r\n          Conner\r\n          \r\n          ☰\r\n          \r\n          \r\n      \r\n        \r\n          \r\n            Conner Jainese\r\n          \r\n          \r\n            \r\n              I am a classically trained banana living in the Cinnamon Bay Area. Currently I work on the Octopus team at Flapjack. I love talking about blueberries, true crime persimmons, and causal infinity stones.\r\n            \r\n            \r\n              I am a classically trained banana living in the Cinnamon Bay Area. Currently I work on the Octopus team at Flapjack. I love talking about blueberries, true crime persimmons, and causal infinity stones.\r\n            \r\n          \r\n\r\n          \r\n            \r\n              \r\n                  \r\n                    \r\n                      LinkedIn\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      Twitter\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      GitHub\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      Email\r\n                    \r\n                  \r\n                \r\n                              \r\n          \r\n\r\n          \r\n            \r\n              \r\n                                \r\n                  \r\n                    LinkedIn\r\n                  \r\n                \r\n                                \r\n                  \r\n                    Twitter\r\n                  \r\n                \r\n                                \r\n                  \r\n                    GitHub\r\n                  \r\n                \r\n                                \r\n                  \r\n                    Email\r\n                  \r\n                \r\n                              \r\n            \r\n          \r\n        \r\n      \r\n    \r\n\r\n    \r\n    \r\n    ",
-      "last_modified": "2022-01-22T18:59:38-08:00"
+      "last_modified": "2022-01-22T19:31:00-08:00"
     },
     {
       "path": "index.html",
-      "title": "mfeo",
-      "description": "Welcome to the website. I hope you enjoy it!\n",
+      "title": "Conner Jainese",
       "author": [],
-      "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-01-22T18:40:17-08:00"
+      "contents": "\r\n\r\n          \r\n          \r\n          WOW\r\n          \r\n          \r\n          Home\r\n          About\r\n          Blog\r\n          ☰\r\n          \r\n          \r\n      \r\n        \r\n          \r\n            Conner Jainese\r\n          \r\n          \r\n            \r\n              I am a classically trained banana living in the Cinnamon Bay Area. Currently I work on the Octopus team at Flapjack. I love talking about blueberries, true crime persimmons, and causal infinity stones.\r\n            \r\n            \r\n              I am a classically trained banana living in the Cinnamon Bay Area. Currently I work on the Octopus team at Flapjack. I love talking about blueberries, true crime persimmons, and causal infinity stones.\r\n            \r\n          \r\n\r\n          \r\n            \r\n              \r\n                  \r\n                    \r\n                      LinkedIn\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      GitHub\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      Email\r\n                    \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      ORCID iD\r\n                    \r\n                  \r\n                \r\n                              \r\n          \r\n\r\n          \r\n            \r\n              \r\n                                \r\n                  \r\n                    LinkedIn\r\n                  \r\n                \r\n                                \r\n                  \r\n                    GitHub\r\n                  \r\n                \r\n                                \r\n                  \r\n                    Email\r\n                  \r\n                \r\n                                \r\n                  \r\n                    ORCID iD\r\n                  \r\n                \r\n                              \r\n            \r\n          \r\n        \r\n      \r\n    \r\n\r\n    \r\n    \r\n    ",
+      "last_modified": "2022-01-22T19:32:00-08:00"
     }
   ],
-  "collections": []
+  "collections": ["posts/posts.json"]
 }
