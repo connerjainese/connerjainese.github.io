@@ -6,8 +6,6 @@ links:
     url: "https://www.linkedin.com/in/conner-jainese-848744a5"
   - label: GitHub
     url: "https://github.com/connerjainese"
-  - label: Email
-    url: "connerjainese@ucsb.edu"
   - label: ORCID iD
     url: "https://orcid.org/0000-0002-6730-3669"
 site: distill::distill_website
