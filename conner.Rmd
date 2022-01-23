@@ -1,0 +1,19 @@
+---
+title: "Conner Jainese"
+image: "conner.jpg"
+links:
+  - label: LinkedIn
+    url: ""
+  - label: Twitter
+    url: ""
+  - label: GitHub
+    url: ""
+  - label: Email
+    url: ""
+output:
+  postcards::jolla
+---
+ 
+I am a classically trained banana living in the Avocado Bay Area. 
+Currently I work on the Octopus team at Flapjack. I love talking about blueberries, 
+true crime persimons, and causal infinity stones.
