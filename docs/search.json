@@ -3,10 +3,9 @@
     {
       "path": "about.html",
       "title": "About this site",
-      "description": "Some additional details about the website",
       "author": [],
-      "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-02-08T01:09:25-08:00"
+      "contents": "\r\nThis is a website made by myself, for… well… whoever might be interested. Enjoy!\r\n\r\n\r\n\r\n",
+      "last_modified": "2022-02-08T01:32:54-08:00"
     },
     {
       "path": "aboutme.html",
