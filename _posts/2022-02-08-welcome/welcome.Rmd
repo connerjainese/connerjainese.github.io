@@ -1,0 +1,33 @@
+---
+title: "Welcome"
+description: |
+  A surfboard gathers dust.
+author:
+  - name: Conner Jainese 
+    url: {}
+date: 2022-02-06
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+I'd like to share a little about my time here at UCSB. As a bright eyed and bushy tailed undergraduate, in the incoming class of 2011, I spent a lot of time surfing with my friends, stuffing my face at the dining commons, and studying for classes... sometimes.
+
+I managed to join the Love Lab in 2014, got my AAUS (American Academy of Underwater Sciences) certification, and began doing reasearch on the fishes living around Santa Barbara's Oil platforms. I found myself spending a lot of time diving around the oil platforms in our area, a little less time surfing, and even a little less studying. 
+
+In the years following my graduation (2015), I spent MOST of my time SCUBA diving oil platforms, some of my time working as a deckhand aboard a commercial passenger fishing vessel (got to pay the bills somehow), very little of my time surfing, and (thankfully) no time studying for classes. 
+
+Then one fateful day I decided to go back to school for a graduate degree.
+
+Now I spend MOST of my time studying for classes and analyzing data for my thesis, a few days a month I SCUBA for miscellanious work projects, and my surfboard gathers dust in the corner of the room I'm writing this blog post from.
+
+Such is my time at UCSB, past and present. 
+
+
+
+

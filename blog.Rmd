@@ -1,4 +1,5 @@
 ---
-title: "blog" 
+title: "My Time at UCSB" 
 listings: posts
 ---
+ 
