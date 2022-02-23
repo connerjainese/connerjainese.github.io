@@ -2,26 +2,15 @@
 title: "Publications"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+## Origins and Evolution of Extreme Life Span in Pacific Ocean Rockfishes
 
-## R Markdown
+Kolora, Sree Rohit Raj, Gregory L. Owens, Juan Manuel Vazquez, Alexander Stubbs, Kamalakar Chatla, Conner Jainese, Katelin Seeto, et al. “Origins and Evolution of Extreme Life Span in Pacific Ocean Rockfishes.” Science 374, no. 6569 (November 12, 2021): 842–47. https://doi.org/10.1126/science.abg5332.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## The Role of Oil and Gas Conductors as Fish Habitat at Two Southern California Offshore Platforms
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Love, Milton S., Scott Clark, Merit McCrea, Katelin Seeto, Conner Jainese, Mary Nishimoto, Ann Scarborough Bull, and Li Kui. “The Role of Oil and Gas Conductors as Fish Habitat at Two Southern California Offshore Platforms.” Bulletin, Southern California Academy of Sciences 119, no. 3 (February 2021): 68–77. https://doi.org/10.3160/0038-3872-119.3.68.
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
+## Spots on Sides of Giant Sea Bass (Stereolepis Gigas Ayres, 1859) Are Likely Unique to Each Individual
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Love, Milton S., Katelin Seeto, Conner Jainese, and Mary M. Nishimoto. “Spots on Sides of Giant Sea Bass (Stereolepis Gigas Ayres, 1859) Are Likely Unique to Each Individual.” Bulletin, Southern California Academy of Sciences 117, no. 1 (April 2018): 77–81. https://doi.org/10.3160/soca-117-01-77-81.1.
