@@ -14,5 +14,7 @@ navbar:
       href: code.html
     - text: "Blog"
       href: blog.html
+    - text: "Code"
+      href: code_examples.html
 output: distill::distill_article
 
