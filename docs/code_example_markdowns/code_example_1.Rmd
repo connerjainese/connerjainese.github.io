@@ -1,0 +1,131 @@
+---
+title: "Agglomerative Hierarchical Clustering of Stream Chemistry in Santa Barbara "
+author:
+  - name: Conner Jainese 
+    url: {}
+date: 2022-02-23
+output: 
+  distill::distill_article:
+    self_contained: false
+---
+
+## Overview
+
+This report explores a data set collected by the Santa Barbara Coastal Long Term Ecological Reserch (LTER) group between 2000 and 2019. The data set contains measurements for stream chemistry in Santa Barbara area watersheds. We will use agglomerative hierarchical clustering to compare similarities between the 13 water sampling locations listed in this data set.     
+
+**Data Citation:** Santa Barbara Coastal LTER and J. Melack. 2019. SBC LTER: Land: Stream chemistry in the Santa Barbara Coastal drainage area, ongoing since 2000 ver 16. Environmental Data Initiative. https://doi.org/10.6073/pasta/67a558a24ceed9a0a5bf5e46ab841174
+
+
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+# load packages 
+library(tidyverse)
+library(here)
+library(janitor)
+library(naniar)
+library(ggdendro)
+library(dendextend)
+```
+
+
+```{r}
+# read in the data and clean variable names 
+stream_dat <- read_csv(here("data", 
+                            "sbc_lter_registered_stream_chemistry.csv")) %>% 
+  janitor::clean_names() %>% 
+  # replace -999.0 values with NA
+  naniar::replace_with_na_all(condition = ~.x == -999.0) %>% 
+  # remove timestamp column
+  select(-timestamp_local)
+```
+
+
+```{r}
+# create df with means for each site in single rows
+stream_dat_mean <- stream_dat %>% 
+  # group by site 
+  group_by(site_code) %>% 
+  # summarize mean for each variable ignoring NA values 
+  summarise_each(funs(mean(., na.rm = TRUE)))
+
+# create scaled version of data 
+mean_scale <- stream_dat_mean %>%
+  # remove non numeric variables before scaling
+  select(-site_code) %>% 
+  # scale 
+  scale()
+
+# add rownames (site_code) back to scaled data 
+rownames(mean_scale) <- stream_dat_mean$site_code
+```
+
+
+```{r}
+# create euclidean distance matrix
+stream_dist <- dist(mean_scale, method = 'euclidean')
+#stream_dist
+
+# complete linkage hierarchical clustering 
+stream_hc_complete <- hclust(stream_dist, method = "complete")
+
+# preliminary plotting
+# plot(stream_hc_complete, cex = 0.6, hang = -1)
+```
+
+
+```{r}
+# create data without na values for identifying useful number of clusters for dendrogram visualization
+# mean_scale_no_na <- na.omit(mean_scale)
+
+# use kmeans clustering to find clusters
+# fviz_nbclust(mean_scale_no_na, FUNcluster = kmeans, method = 'wss', k.max = 8)
+# 3 clusters seems to capture the most variance 
+```
+
+
+```{r}
+# create dendrogram with ggdendro::ggdendrogram
+dendro <- ggdendrogram(stream_hc_complete, rotate = TRUE) +
+  theme_test() +
+  # update x/y labs and title/subtitle
+  labs(y = "Euclidian Distance", 
+       x = "Site Code", 
+       title = "Hierachical Clustering of Santa Barbara Streams", 
+       subtitle = "Based on Water Chemistry") + 
+  # center title and subtitle
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(plot.subtitle = element_text(hjust = 0.5)) +
+  # color ticks based on 3 groupings from earlier clulstering
+  theme(axis.text.y = 
+          element_text(colour = 
+                         c("red", "darkolivegreen", "darkolivegreen", 
+                           "darkolivegreen", "darkolivegreen", 
+                           "darkolivegreen", "darkolivegreen", 
+                           "darkolivegreen", "darkolivegreen", 
+                           "darkolivegreen", "deepskyblue", 
+                           "deepskyblue", "deepskyblue")))
+# print
+dendro
+```
+
+**Figure 1.** Dendrogram illustrating Euclidean distance between 13 stream sampling locations (Site Code) in the Santa Barbara area based on mean values for 10 measured variables. Site codes are colored to represent 3 generally related groups (number of groups determined by kmeans clustering) and branch lengths of the dendrogram are drawn to represent Euclidean distance.
+
+
+## Summary
+
+### Group 1
+- Devereaux Creek (DV01) stands alone in it's own cluster
+- Samping for this stream occured at the Devereaux Slough inflow. 
+- Since the Devereaux Slough is tidal for some portions of the year, it is possible that the chemistry at this location is affected by sea water that enters the slough. 
+
+### Group 2
+- The largest group containing 9 sampling locations.
+- It is worth noting that the two Mission Creek sampling locations (MC00 and MC06) are closely grouped within this larger grouping. 
+- Mission creek sites are also closely grouped with San Pedro Creek (SP02) and Arroyo Burro Creek (AB00), which is possibly a reult of these creeks flowing through similarly developed portions of Santa Barbara. 
+- It is likely that these creeks experience similar anthropogenic chemical inputs. 
+
+### Group 3
+- 3 sampling sites from 3 different creeks compose this grouping
+- Interestingly, all of these site_codes contain the suffix "02". This suffix represents the relative distance upstream of the sampling location.
+- It is possible that the chemical makeup of the streams at these sampling locations is affected by their relative distance upstream. 
+- It is also worth noting that the Tecolote Creek (TO02) and Bell Canyon Creek (BC02) sampling locations are only ~1.2 km away from each other.
