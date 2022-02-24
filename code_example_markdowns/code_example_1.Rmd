@@ -4,7 +4,7 @@ author:
   - name: Conner Jainese 
     url: {}
 date: 2022-02-23
-output:
+output: 
   distill::distill_article:
     self_contained: false
 ---

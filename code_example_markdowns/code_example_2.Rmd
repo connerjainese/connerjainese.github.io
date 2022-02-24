@@ -1,0 +1,106 @@
+---
+title: "PCA Analysis of Fruit and Vegetable Nutrients"
+author:
+  - name: Conner Jainese 
+    url: {}
+date: 2022-02-20
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+## Overview
+
+In this report, we explore the nutritional values of a subset of fruits and vegetables from the U.S. Department of Agriculture's FoodData Central. This database provides expanded food nutrient profile data for research and more informed policy making. We will analyze the nutritional data (a subset) of four fruit and vegetable types (grapes, persimmons, mushrooms, and lettuce) using Principal Components Analysis (PCA), and compare the results between these groups. 
+
+**Data Citation:** U.S. Department of Agriculture, Agricultural Research Service. FoodData Central, 2019. fdc.nal.usda.gov. 
+
+```{r setup, include= TRUE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+# load packages
+library(tidyverse)
+library(here)
+library(janitor)
+library(data.table)
+library(ggfortify)
+library(patchwork)
+
+```
+
+
+```{r}
+## Data wrangling
+# read in the data and filter for raw vegetables
+nut_dat <- read_csv(here("data", 
+                         "usda_nutrients.csv")) %>% 
+  clean_names()
+
+# filter for raw fruits and vegetables 
+nut_sub <- nut_dat %>% 
+  filter(food_group %in% c("Vegetables and Vegetable Products", 
+                           "Fruits and Fruit Juices")) %>% 
+  filter(descrip %like% "raw", ) %>% 
+  # remove rows with NA for scientific name
+  filter(scientific_name != "NA") %>% 
+  # remove duplicates for scientific name 
+  filter(! duplicated(scientific_name)) %>% 
+  # new column with first word from short_descrip
+  mutate(name = str_extract(short_descrip,"(\\w+)")) %>% 
+  # filter for a few groups of fruits and vegetables 
+  filter(name %in% c("GRAPES", "LETTUCE", 
+                     "MUSHROOMS", "PERSIMMONS")) %>% 
+  # select columns we want to work with for now
+  select(4, 7:15, 17, 46) %>% 
+  drop_na()
+
+# change column names for nicer looking plot outplot 
+nut_sub <- nut_sub %>% 
+  rename("Kcal" = energy_kcal, 
+         "Protein" = protein_g, 
+         "Fat" = fat_g, 
+         "Carbs" = carb_g, 
+         "Sugar" = sugar_g, 
+         "Fiber" = fiber_g, 
+         "Vitamin A" = vit_a_mcg, 
+         "Vitamin B6" = vit_b6_mg, 
+         "Vitamin C" = vit_c_mg)
+
+```
+
+
+```{r}
+## PCA start 
+# create nut_pca
+nut_pca <- nut_sub %>% 
+  # select only numeric variables
+  select(3:10) %>% 
+  # scale dissimilar units and numbers
+  scale() %>% 
+  prcomp()
+
+# see weighting for each pca
+#nut_pca$rotation
+
+# biplot using autoplot
+autoplot(nut_pca,
+     	data = nut_sub,
+     	loadings = TRUE,
+     	colour = 'name',
+     	loadings.label = TRUE,
+     	loadings.colour = "black",
+     	loadings.label.colour = "black",
+     	loadings.label.vjust = -0.5, 
+     	size = 3) +
+  theme_classic() +
+  # update labs
+  labs(title = "PCA Bi-Plot of Nutrients for Select Foods", 
+       color = "Group Name")
+```
+
+**Figure 1.** PCA bi-plot showing how 4 fruit and vegetable types are grouped relative to principal component 1 (PC1) and principal component 2 (PC2). Arrows represent the weighting of included nutrient variables for this PCA analysis. Points represent individual fruit and vegetable species, colored by respective groups.  
+
+
+## Summary
+
+In this exploration of the FoodData Central database, we took a subset of food nutrient profile data, and focused on four general groups of fruits and vegetables. We performed a PCA analysis of eight nutrient variables for these groups and plotted them in a bi-plot. Clear patterns emerged with the two fruits in this analysis (grapes and persimmons) grouped on one side of the bi-plot, strongly influenced by total kilocalories (Kcal), sugar content, and carbohydrates. The three aforementioned nutrients are positively correlated (as shown by the acute angles between loading arrows) which makes sense since sugars are a form of carbohydrate and both of these nutrients are calorically dense. Mushrooms occupy another tight grouping on the bi-plot and are strongly influenced by fiber, vitamin B, and protein (which are positively coerrelated to one another). These three nutrients are also moderately negatively correlated with sugar, carbohydrates, and Kcal, as shown by the obtuse angles formed by their respective loading arrows. Lettuce stands in a third grouping at the top of the bi-plot, strongly influenced by vitamin A content. Vitamin A also appears to show either no correlation, or a relatively small negative correlation to all of the previously mentioned nutrients, since the respective loading arrow angles are either close to 90$^\circ$ or slightly obtuse. The nutrient with the greatest negative correlation to vitamin A is fat content, represented by the largest loading arrow angle, relatively. 

@@ -1,5 +1,7 @@
 ---
 title: "Blog Posts!" 
-listings: posts
+listing: 
+  posts: 
+    - welcome_post
 ---
  
