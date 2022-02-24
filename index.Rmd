@@ -1,6 +1,6 @@
 ---
 title: "Conner Jainese"
-image: "conner.jpg"
+image: "pics/conner.jpg"
 links:
   - label: LinkedIn
     url: "https://www.linkedin.com/in/conner-jainese-848744a5"
