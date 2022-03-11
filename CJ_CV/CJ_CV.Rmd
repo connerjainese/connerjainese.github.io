@@ -1,15 +1,10 @@
 ---
-name: Marie
-surname: Curie
-position: "Professor"
-address: "School of Physics & Chemistry, École Normale Supérieure"
-phone: +1 22 3333 4444
-www: mariecurie.com
-email: "Marie.Curie@ens.fr"
-twitter: mariecurie
-github: mariecurie
-linkedin: mariecurie
-date: "`r format(Sys.time(), '%B %Y')`"
+name: Conner 
+surname: Jainese
+position: "Project Scientist"
+address: "University of California, Santa Barbara. Building 7955 Santa Barbara, CA 93106 - 6150"
+phone: +1 562 382 3854
+email: "connerjainese@ucsb.edu"
 output: vitae::moderncv
 ---
 
@@ -18,47 +13,64 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(vitae)
 ```
 
-# Some stuff about me
+# Experience
 
- * I poisoned myself doing research.
- * I was the first woman to win a Nobel prize
- * I was the first person and only woman to win a Nobel prize in two different sciences.
+**Caselle Lab, Marine Science Institute / Project Scientist** 
+
+*July 2019 - Present. Santa Barbara, CA*
+
+Organizing and managing a baited camera survey comparing fish assemblages on deep (30-100m) rocky reef habitat inside and outside Marine Protected Areas in Southern California. Responsibilities include leading field operations, camera deployment/recovery, maintaining a video data library, and managing undergraduate volunteers/video analysis operations.
+
+\
+**Love Lab, Marine Science Institute / Lab Technician**
+
+*June 2015 - July 2019. Santa Barbara, California* 
+
+Responsibilities including, scientific diving and data collection, small boat operations, specimen collections, and use of data management/image analysis software. Developing image analysis protocols for identifying individuals of the critically endangered giant sea bass (Stereolepis gigas), and long term maintenance of an image library cataloging individuals in California.
+
+\
+**California Department of Fish and Wildlife / Scientific Aid**
+
+*October 2015 - December 2017. Santa Barbara, CA*
+
+Collecting fisheries data as a scientific aid for the California Recreational Fisheries Survey. Providing outreach and education to recreational anglers on behalf of the California Department of Fish and Wildlife.
 
 # Education
 
 ```{r}
 library(tibble)
 tribble(
-  ~ Degree, ~ Year, ~ Institution, ~ Where,
-  "Informal studies", "1889-91", "Flying University", "Warsaw, Poland",
-  "Master of Physics", "1893", "Sorbonne Université", "Paris, France",
-  "Master of Mathematics", "1894", "Sorbonne Université", "Paris, France"
+  ~ Degree, ~ Year, ~ Institution,
+  "M.A. Ecology, Evolution, and Marine Biology", "2020-Present", "University of California Santa Barbara",
+  "B.S. Aquatic Biology", "2011-2015", "University of California Santa Barbara"
 ) %>% 
-  detailed_entries(Degree, Year, Institution, Where)
+  detailed_entries(Degree, Year, Institution)
 ```
 
-# Nobel Prizes
+# Certifications
 
 ```{r}
 tribble(
-  ~Year, ~Type, ~Desc,
-  1903, "Physics", "Awarded for her work on radioactivity with Pierre Curie and Henri Becquerel",
-  1911, "Chemistry", "Awarded for the discovery of radium and polonium"
+  ~Desc, ~Year,
+  "Divemaster (NAUI)", "2018",
+  "UCSB Small Boat Captain", "2016",
+  "AAUS Scientific SCUBA Diver (NAUI)", "2014"
 ) %>% 
-  brief_entries(
-    glue::glue("Nobel Prize in {Type}"),
-    Year, 
-    Desc
-  )
+  brief_entries(Desc, Year)
 ```
+\
+\
 
 # Publications
 
-```{r}
-library(dplyr)
-knitr::write_bib(c("vitae", "tibble"), "packages.bib")
+**“Origins and Evolution of Extreme Life Span in Pacific Ocean Rockfishes.”**
+Kolora, Sree Rohit Raj, Gregory L. Owens, Juan Manuel Vazquez, Alexander
+Stubbs, Kamalakar Chatla, Conner Jainese, Katelin Seeto, et al. Science,
+(November 2021)
 
-bibliography_entries("packages.bib") %>%
-  arrange(desc(author$family), issued)
-```
+\
+**“The Role of Oil and Gas Conductors as Fish Habitat at Two Southern California Offshore Platforms”** Milton S. Love, Scott Clark, Merit McCrea, Katelin Seeto, Conner Jainese, Mary M. Nishimoto, Ann Scarborough Bull, and Li Kui Bulletin, Southern California Academy of Sciences 119(3), 68-77, (December 2020)
+
+\
+**"Spots on Sides of Giant Sea Bass (Stereolepis gigas Ayres, 1859) are Likely Unique to Each Individual"** Milton S. Love, Katelin Seeto, Conner Jainese, and Mary M. Nishimoto Bulletin, Southern California Academy of Sciences 117(1), 77-81, (April 2018)
 
