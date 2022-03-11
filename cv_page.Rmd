@@ -3,7 +3,7 @@ title: "Curriculum Vitae"
 date: "3/10/2022"
 ---
 
-<a href = 'CJ_CV.pdf' target = '_blank'>link text you will see on the site</a>
+<a href = 'CJ_CV.pdf' target = '_blank'>Click for a PDF</a>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
