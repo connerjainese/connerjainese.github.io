@@ -1,13 +1,14 @@
 ---
 title: "Willamette Falls Fish Passage"
-author: "Conner Jainese"
+author:
+  - name: Conner Jainese 
+    url: {}
+date: 2022-03-10
 output: 
-  html_document:
-    theme: darkly
-    code_folding: hide
+  distill::distill_article:
+    self_contained: false
 ---
-***
-***
+
 ```{r setup, include = TRUE, message = FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 # load packages
@@ -22,7 +23,7 @@ library(feasts)
 
 ```{r fig.align='center'}
 # add salmon pic
-knitr::include_graphics(here("chinook_pic.jpg"))
+knitr::include_graphics(here("pics", "chinook_pic.jpg"))
 ```
 
 **Figure 1.** Chinook salmon (*Oncorhynchus tshawytscha*) swimming upstream to spawn^1^. This is but one of the salmonid species commonly observed at the Willamette Falls fish passage. 
@@ -32,7 +33,7 @@ knitr::include_graphics(here("chinook_pic.jpg"))
 In this report, we will be exploring the Willamette Falls fish passage data for adult salmonids observed swimming upstream between 1/1/2001 and 12/31/2010. This data is collected by the Oregon Department of Fish and Wildlife, and is made available through Columbia River DART (Data Access Real Time)^2^. Adult fish passage data is used to monitor and assess salmonid stock health for real time management. We will be conducting a 3-part time series analysis on this dataset.    
 ```{r fig.align="center"}
 # add map
-knitr::include_graphics(here("willamette_falls_map.png"))
+knitr::include_graphics(here("pics", "willamette_falls_map.png"))
 ```
 
 **Figure 2.** Map of the Willamette River Basin in Oregon, with the Willamette Falls fish passage labeled at the northern part of the basin^3^. 
@@ -145,8 +146,7 @@ ggplot(data = fish_total,
 - We also see again, that peaks in Jack Coho precede peaks in regular adult Coho by one year, which is consistent with the biology/behavior of these two groups mentioned in the "Original Time Series" tab. 
 
 ## {-}
-***
-***
+
 ### Citations
 
 ^1^ Oregon Department of Fish and Wildlife, https://www.oregonconservationstrategy.org/strategy-species/chinook-salmon/chinook-salmon-spring-willamette-smu/
