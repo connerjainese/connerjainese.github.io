@@ -1,5 +1,5 @@
 ---
-title: "Willamette Falls Fish Passage"
+title: "Capitalism VS Bolshevism: A Text Analysis"
 author:
   - name: Conner Jainese 
     url: {}
@@ -9,148 +9,182 @@ output:
     self_contained: false
 ---
 
-```{r setup, include = TRUE, message = FALSE, warning = FALSE}
+### Overview
+
+In this report we will perform a text analysis on the book: "Capitalism VS Bolshevism", published in 1919 by American author George L. Walker^1^. More specifically, we will identify the most commonly used words in each chapter, and perform a sentiment analysis of the text using the NRC Word-Emotion Association Lexicon^2^. This lexicon acts as a reference assigning one of eight basic emotions (anger, fear, anticipation, trust, surprise, sadness, joy, disgust) and two general sentiments (positive and negative) to a list of commonly used English words. The NRC Lexicon was developed via crowd sourcing.   
+
+```{r setup, include=TRUE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 # load packages
 library(tidyverse)
 library(here)
-library(janitor)
-library(lubridate)
-library(tsibble)
-library(ggdark)
-library(feasts)
+library(tidytext)
+library(pdftools)
+library(stringr)
 ```
-
-```{r fig.align='center'}
-# add salmon pic
-knitr::include_graphics(here("pics", "chinook_pic.jpg"))
-```
-
-**Figure 1.** Chinook salmon (*Oncorhynchus tshawytscha*) swimming upstream to spawn^1^. This is but one of the salmonid species commonly observed at the Willamette Falls fish passage. 
-
-## Overview
-
-In this report, we will be exploring the Willamette Falls fish passage data for adult salmonids observed swimming upstream between 1/1/2001 and 12/31/2010. This data is collected by the Oregon Department of Fish and Wildlife, and is made available through Columbia River DART (Data Access Real Time)^2^. Adult fish passage data is used to monitor and assess salmonid stock health for real time management. We will be conducting a 3-part time series analysis on this dataset.    
-```{r fig.align="center"}
-# add map
-knitr::include_graphics(here("pics", "willamette_falls_map.png"))
-```
-
-**Figure 2.** Map of the Willamette River Basin in Oregon, with the Willamette Falls fish passage labeled at the northern part of the basin^3^. 
-
-## Time Series Analyses {.tabset .tabset-fade}
 
 ```{r}
-# read in fish data and clean up names 
-fish_dat <- read_csv(here("data", "willamette_fish_passage.csv")) %>% 
-  clean_names()
+# read in the text
+text <- pdf_text(here("data", "capitalismvsbolshevism.pdf"))
+
+# make text into dataframe
+text_lines <- data.frame(text) %>%
+  # add column for page number and fill in
+  mutate(page = 1:n()) %>% 
+  # separate rows of text
+  mutate(text_full = str_split(text, pattern = "\\n")) %>%
+  # split up nested rows of texted into their own row of the df
+  unnest(text_full) %>%
+  # remove whitespaces
+  mutate(text_full = str_trim(text_full))
+
+# wrangle chapters
+text_chapters <- text_lines %>% 
+  # remove beginning part of book before main text
+  slice(-(1:211)) %>% 
+  # create column with chapter using str_detect
+  mutate(chapter = ifelse(str_detect(text_full, "Chapter"), 
+                          text_full, 
+                          NA)) %>%
+  # auto fill downwards to populate all lines in chapter
+  fill(chapter, .direction = "down") %>%
+  # separate word chapter from chapter number 
+  separate(col = chapter, 
+           into = c("ch", "no"), 
+           sep = " ") %>%
+  # make reglar chapter numbers from roman numerals 
+  mutate(chapter = as.numeric(as.roman(no)))
+
+# wrangle for word counts
+text_words <- text_chapters %>%
+  # unnest to get indiviual words on separate rows 
+  unnest_tokens(word, text_full) %>% 
+  # remove text column
+  select(-text)
+
+# make clean, no stop words
+text_words_clean <- text_words %>%
+  # remove stop words 
+  anti_join(stop_words, by = "word")
+
+# count them up
+word_counts <- text_words_clean %>%
+  # remove na values
+  na.omit() %>% 
+  # count by chapter
+  count(chapter, word)
+
+# find top 5 words
+top_5 <- word_counts %>%
+  # group by chapter
+  group_by(chapter) %>% 
+  # arrange in descending order
+  arrange(-n) %>% 
+  # take the top 5
+  slice(1:5) %>%
+  # ungroup
+  ungroup()
 ```
 
-### Original Time Series
+```{r}
+# chapter names list for plots
+chapters <- c("1" = "The System", 
+               "2" = "Capital", 
+               "3" = "Overproduction", 
+               "4" = "War Lessons", 
+               "5" = "A Protective Tariff", 
+               "6" = "Wages", 
+               "7" = "Bolshevism", 
+               "8" = "Discontent", 
+               "9" = "Profits and Interest", 
+               "10" = "The Corporation", 
+               "11" = "Wall Street", 
+               "12" = "Money", 
+               "13" = "Taxation", 
+               "14" = "Luxuries", 
+               "15" = "Our Opportunity")
 
-```{r fig.align='center'}
-# wrangle the data a bit 
-fish_og <- fish_dat %>%
-  # select variables we want
-  select(date, coho, jack_coho, steelhead) %>% 
-  # replace na with 0
-  replace_na(list(coho = 0, jack_coho = 0, steelhead = 0)) %>% 
-  # change date to date format 
-  mutate(date = mdy(date)) %>% 
-  # pivot for tsibble
-  pivot_longer(c(coho:steelhead), names_to = "species", 
-               values_to = "count") %>% 
-  # make tsibble
-  as_tsibble(key = species, index = date) %>% 
-  # replace values to look better in figure 
-  mutate(species = replace(species, species == "coho", "Coho")) %>% 
-  mutate(species = replace(species, species == "jack_coho", "Jack Coho")) %>% 
-  mutate(species = replace(species, species == "steelhead", "Steelhead"))
-
-# plot
-ggplot(data = fish_og, 
-       aes(x = date, y = count)) +
-  geom_line(aes(color = species)) +
-  facet_grid(species~., scales = "free") +
-  labs(x = "Year", 
-       y = "Adult Salmonid Count", 
-       title = "Adult Salmonid Counts at Willamette Falls") +
-  dark_theme_gray() +
-  theme(legend.position = "none")  +
-  theme(plot.title = element_text(size = 16))
-
+# plotting top 5
+ggplot(data = top_5, 
+       aes(x = n, 
+           y = word)) +
+  # pick fill color
+  geom_col(fill = "aquamarine4") +
+  # facet wrap by chapter and free scales
+  facet_wrap(~chapter, scales = "free", labeller = labeller(chapter = chapters)) +
+  # change theme
+  theme_test() +
+  # update labs
+  labs(y = " ",
+       x = " ", 
+       title = "Top 5 Words Used Per Chapter") +
+  # reduce breaks to declutter
+  scale_x_continuous(n.breaks = 4) +
+  # adjust title and facet titles 
+  theme(plot.title = element_text(size = 18, hjust = 0.5), 
+        strip.text.x = element_text(face = "bold", size = 6.5))
 ```
 
-**Figure 3.** Daily fish counts at the Willamette Falls fish passage for three salmonids: Coho (*Oncorhynchus kisutch*), Jack Coho (*Oncorhynchus kisutch*), and Steelhead (*Oncorhynchus mykiss*). Data begins 1/1/2001 and ends 12/31/2010.
+**Figure 1.** The 5 most abundant words in each chapter of "Capitalism VS Bolshevism". Word summary excluded stop words. 
 
-- The greatest similarities in timing of migration and duration of migration occur between Coho and Jack Coho salmon. This is consistent with what we might expect, since these are actually the same species, the only difference being that Jack Coho are one year younger than regular adult Coho.
-- Steelhead have a noticeably wider time range for migration, spanning much of the first half of the year. Coho/Jack Coho have a very narrow range of migration that typically occurs in the latter half of the year. 
-- There is a noticeable 1 year lag between peak Jack Coho migration and Coho peak migration. Since Jack Coho return to spawn 1 year earlier than normal, it is likely that the largest peaks for Coho/Jack Coho are actually fish from the same cohort. 
+```{r fig.height=6.5}
+# bind text to nrc lexicon
+text_nrc <- text_words_clean %>% 
+  inner_join(get_sentiments("nrc"))
 
-### Seasonplots
+# find counts of words by sentiment bin
+text_nrc_counts <- text_nrc %>% 
+  count(chapter, sentiment) %>%
+  # remove na values
+  na.omit
 
-```{r fig.align='center'}
-# wrangling data 
-fish_season <- fish_og %>% 
-  group_by(species) %>% 
-  index_by(yr_mo = ~yearmonth(.)) %>% 
-  summarise(mean = mean(count, na.rm = TRUE))
-
-gg_season(data = fish_season, 
-          y = mean) +
-  dark_theme_gray() +
-  labs(title = "Mean Monthly Salmonid Counts at Willamette Falls", 
-       x = "Month", 
-       y = "Mean Count")  +
-  theme(plot.title = element_text(size = 16))
+# plot nrc sentiment counts 
+ggplot(data = text_nrc_counts, 
+       aes(x = sentiment, 
+           y = n)) +
+  # color columns
+  geom_col(fill = "aquamarine4") +
+  # facet wrap by chapter, free scales, relabel facet titles
+facet_wrap(~chapter, scales = "free", labeller = labeller(chapter = chapters)) +
+  # flip coordinates
+  coord_flip() +
+  # set theme
+  theme_test() +
+  # fix labs
+  labs(y = " ", 
+       x = " ", 
+       title = "NRC Sentiment Occurence By Chapter") +
+  # adjust text appearance 
+  theme(plot.title = element_text(size = 18, hjust = 0.5), 
+        strip.text.x = element_text(face = "bold", size = 6.5))
 ```
 
-**Figure 4.** Mean monthly fish counts at the Willamette Falls fish passage for three salmonids: Coho (*Oncorhynchus kisutch*), Jack Coho (*Oncorhynchus kisutch*), and Steelhead (*Oncorhynchus mykiss*). Individual lines represent a single year of data. 
+**Figure 2.** The relative abundance of 10 NRC sentiment associations to words in each chapter of "Capitalism VS Bolshevism". Word summary excluded stop words. 
 
-- Here we clearly see that Coho/Jack Coho migrate upstream during a relatively narrow period of time, between August and November.
-- In contrast, peak Steelhead migration occurs between approximately February and July, with very low levels of migration occuring throughout the rest of the year.
-- We also see that migrating Coho abundance increased dramatically in the most recent years of the study, compared to previous years. 
+### Analysis
 
-### Annual Counts by Species
+- General patterns:
+  - For the majority of chapters, "positive" and "trust" were the two most common sentiments, suggesting a generaly positive tone. 
+  - The "negative" sentiment was still relatively abundant in most chapters, just to a lesser degree than "positive" and "trust" suggesting this work might switch back and forth between a "positive" and "negative" tone.  
+  - The sentiments "fear" and "disgust" made up a larger proportion in the chapters "Bolshevism" and "Discontent" relative to other chapters, which calls for a more specific exploration of the Lexicon.  
+  
+- Potential Lexicon bias: 
+  - Upon inspecting a few specific direct sentiment associations withing NRC Lexicon, some interesting patterns became apparent. 
+  - The word "capitalism" was always associate with a "positive" sentiment. 
+  - The words "socialism" and "socialist" were associated with the sentiments "fear", "disgust", "sadness", "negative", and "anger".
+  - Though likely a powerful tool for many applications, this exploration of a political text using the NRC Lexicon revealed a clear political bias that strongly influences the sentiment analysis as a whole. 
+  - Bias in this lexicon is possibly a result of it's crowd sourced origin, and might benefit from input provided by a more politically diverse group of people.
 
-```{r fig.align='center'}
-# more data wrangling
-fish_total <- fish_og %>%
-  # group by species
-  group_by(species) %>%
-  # index by year 
-  index_by(yr = ~year(.)) %>%
-  # sum
-  summarise(total_fish = sum(count)) %>%
-  # make year column factor type 
-  mutate(year = factor(yr))
+***
 
-ggplot(data = fish_total, 
-       aes(y = total_fish, 
-           x = year)) +
-  geom_col(aes(fill = species)) +
-  facet_grid(species~., 
-             scales = "free") +
-  dark_theme_gray() +
-  labs(x = "Year", 
-       y = "Total Count", 
-       title = "Total Salmonid Counts Per Year at Willamette Falls") +
-  theme(legend.position = "none") +
-  theme(plot.title = element_text(size = 16))
-```
+### Citations:
 
-**Figure 5.** Total annual fish counts at the Willamette Falls fish passage for three salmonids: Coho (*Oncorhynchus kisutch*), Jack Coho (*Oncorhynchus kisutch*), and Steelhead (*Oncorhynchus mykiss*).
+^1^ Walker, George Levi. Capitalism vs. Bolshevism. Boston, Mass., Dukelow & Walker Co., 1919. http://archive.org/details/capitalismvsbols00walk.
 
-- In this figure, we see that Steelhead make up a relatively large proportion of the number of fish migrating through Willamette Falls fish passage (peaking at approximately 50,000 individuals per year). 
-- Generally, the abundance of migrating Coho/Jack Coho has increased over the course of this dataset, while Steelhead abundance has decreased. 
-- We also see again, that peaks in Jack Coho precede peaks in regular adult Coho by one year, which is consistent with the biology/behavior of these two groups mentioned in the "Original Time Series" tab. 
+^2^ Crowdsourcing a Word-Emotion Association Lexicon, Saif Mohammad and Peter Turney, Computational Intelligence, 29 (3), 436-465, 2013.
 
-## {-}
 
-### Citations
 
-^1^ Oregon Department of Fish and Wildlife, https://www.oregonconservationstrategy.org/strategy-species/chinook-salmon/chinook-salmon-spring-willamette-smu/
 
-^2^ Oregon Department of Fish and Wildlife, Willamette Falls (Sullivan Project), http://www.cbr.washington.edu/dart/wrapper?type=html&fname=metainventory_WFF.html
 
-^3^ Clemens, Benjamin, MG Mesa, Robert Magie, DA Young, and CB Schreck. “Pre-Spawning Migration of Adult Pacific Lamprey, Entosphenus Tridentatus, in the Willamette River, Oregon, USA.” Environmental Biology of Fishes 93 (January 1, 2012): 245–54.
+
