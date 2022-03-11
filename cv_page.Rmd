@@ -1,0 +1,62 @@
+---
+title: "Curriculum Vitae"
+date: "3/10/2022"
+---
+
+<a href = 'CJ_CV.pdf' target = '_blank'>link text you will see on the site</a>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Experience
+
+**Caselle Lab, Marine Science Institute / Project Scientist**   
+*July 2019 - Present. Santa Barbara, CA*  
+Organizing and managing a baited camera survey comparing fish assemblages on deep (30-100m) rocky reef habitat inside and outside Marine Protected Areas in Southern California. Responsibilities include leading field operations, camera deployment/recovery, maintaining a video data library, and managing undergraduate volunteers/video analysis operations.
+
+\
+**Love Lab, Marine Science Institute / Lab Technician**  
+*June 2015 - July 2019. Santa Barbara, California*  
+Responsibilities including, scientific diving and data collection, small boat operations, specimen collections, and use of data management/image analysis software. Developing image analysis protocols for identifying individuals of the critically endangered giant sea bass (Stereolepis gigas), and long term maintenance of an image library cataloging individuals in California.
+
+\
+**California Department of Fish and Wildlife / Scientific Aid**   
+*October 2015 - December 2017. Santa Barbara, CA*   
+Collecting fisheries data as a scientific aid for the California Recreational Fisheries Survey. Providing outreach and education to recreational anglers on behalf of the California Department of Fish and Wildlife.
+
+# Education
+
+**M.A. Ecology, Evolution, and Marine Biology**   
+University of California Santa Barbara
+*2020-Present* 
+
+**B.S. Aquatic Biology**  
+University of California Santa Barbara
+*2011-2015*
+
+
+# Certifications
+
+**Divemaster (NAUI)**  
+  *2018*
+
+**UCSB Small Boat Captain**  
+  *2016*
+  
+**AAUS Scientific SCUBA Diver (NAUI)**  
+  *2014*
+\
+
+# Publications
+
+**“Origins and Evolution of Extreme Life Span in Pacific Ocean Rockfishes.”**
+Kolora, Sree Rohit Raj, Gregory L. Owens, Juan Manuel Vazquez, Alexander
+Stubbs, Kamalakar Chatla, Conner Jainese, Katelin Seeto, et al. Science,
+(November 2021)
+
+\
+**“The Role of Oil and Gas Conductors as Fish Habitat at Two Southern California Offshore Platforms”** Milton S. Love, Scott Clark, Merit McCrea, Katelin Seeto, Conner Jainese, Mary M. Nishimoto, Ann Scarborough Bull, and Li Kui Bulletin, Southern California Academy of Sciences 119(3), 68-77, (December 2020)
+
+\
+**"Spots on Sides of Giant Sea Bass (Stereolepis gigas Ayres, 1859) are Likely Unique to Each Individual"** Milton S. Love, Katelin Seeto, Conner Jainese, and Mary M. Nishimoto Bulletin, Southern California Academy of Sciences 117(1), 77-81, (April 2018)
+
