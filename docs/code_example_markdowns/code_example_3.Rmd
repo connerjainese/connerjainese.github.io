@@ -1,0 +1,133 @@
+---
+title: "Mapping California Oil Spills"
+author:
+  - name: Conner Jainese 
+    url: {}
+date: 2022-03-10
+output: 
+  distill::distill_article:
+    self_contained: false
+---
+
+## Overview
+
+In this report, we explore a dataset provided by the California Department of Fish and Wildlife, published for the intention of providing relevant California oil spill data to the Office of Spill Prevention and Response (OSPR). Using different styles of mapping, we look at the distribution of oil spills throughout the state, locating counties where oil spill are most prevelant. 
+
+
+```{r setup, include=TRUE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+# load packages
+library(tidyverse)
+library(here)
+library(janitor)
+library(sf)
+library(tmap)
+library(ghibli)
+
+```
+
+
+```{r}
+# read in the spill data and clean column names 
+oil_dat <- read_csv(here("data", "Oil_Spill_Incident_Tracking_[ds394].csv")) %>% 
+  clean_names()
+
+# read in the California counties shapefile 
+ca_counties_sf <- read_sf(here("data", 
+                               "ca_counties", 
+                               "CA_Counties_TIGER2016.shp"))
+```
+
+
+```{r}
+# clean subset of counties, clean names and select variables (don't have to select geometry, automatically included)
+ca_subset_sf <- ca_counties_sf %>% 
+  clean_names() %>% 
+  select(name, aland) 
+
+# # inspect coordinate system for counties sf
+# ca_subset_sf %>%
+#   st_crs()
+# # ID["EPSG",3857]
+
+# change oil_dat into an sf object and make crs consistent with metadata
+oil_dat_sf <- st_as_sf(oil_dat, coords = c("longitude", "latitude"), 
+    crs = 4326) 
+
+# transform crs to be consistent with ca counties sf 
+oil_dat_3857_sf <- st_transform(oil_dat_sf, 3857)
+
+# # inspect coordinate system for oil_dat crs transformed sf
+# oil_dat_3857_sf %>%
+#   st_crs()
+# # ID["EPSG",3857]
+```
+
+## Interactive Map of Oil Spills in California
+```{r}
+# interactive map
+# set interavtice map mode
+tmap_mode(mode = "view") +
+  # set basemap
+  tm_basemap(providers$Esri.OceanBasemap) +
+  # set data for counties shape
+  tm_shape(ca_subset_sf) +
+  # define fill, palette, and remove legend
+  tm_fill("name", palette = ghibli_palettes$PonyoLight, 
+          legend.show = FALSE) +
+  # add oil spill data points
+  tm_shape(oil_dat_3857_sf) +
+  # change dot color and border 
+  tm_dots("firebrick4", border.col = "black")
+```
+
+**Fig 1.** Interactive map of California, with individual oil spill information for all oil spill incidents in 2008. 
+
+## Oil Spills Per County Map
+```{r}
+# filter data for only inland spills
+oil_dat_inland_sf <- oil_dat_3857_sf %>% 
+  filter(inlandmari == "Inland")
+
+# spatial join of counties and points
+ca_oil_sf <- ca_subset_sf %>% 
+  st_join(oil_dat_inland_sf)
+
+
+#new sf object for summarizing 
+oil_counts_sf <- ca_oil_sf %>% 
+  # croup by county name 
+  group_by(name) %>% 
+  # count up all the records in each county 
+  summarize(n_records = n())
+
+# setup ggplot with oil counts data  
+ggplot(data = oil_counts_sf) +
+  # fill = summed oil spills, set border color and size 
+  geom_sf(aes(fill = n_records), color = "white", size = 0.1) +
+  scale_fill_gradient(low = "lightgrey", high = "red") +
+  theme_test() +
+  labs(fill = "Number of Oil Spills")
+
+```
+
+**Fig 2.** Map of the abundance of inland oil spills in California, by county, in 2008. 
+
+```{r}
+# find the top 5 counties by number of oil spills
+top_5 <- oil_counts_sf %>% 
+  # arrange by number of spills
+  arrange(-n_records) %>% 
+  # take the top 5
+  head(5)
+```
+
+
+## Summary
+
+By far the California county with the most oil spill incidents is Los Angeles County with `r top_5$n_records[1]` incidents. The second and third most incidents were in San Mateo and Alameda Counties (`r top_5$n_records[2]` and `r top_5$n_records[3]` incidents respectively). San Diego and Orange Counties had the 4th and 5th most oil spill incidents (`r top_5$n_records[4]` and `r top_5$n_records[5]` incidents respectively). It is worth noting that all 5 of these counties are in close proximity to major shipping ports (Los Angeles/Long Beach and San Francisco), which may be contributing to the abundance of oil spill incidents in these areas. Additionally, the Los Angeles/Long Beach area has a high density of active oil wells, which may also be contributing to the high number of spills in this area specifically. 
+
+**Data Citation:** 
+Mark Lampinen; California Department of Fish and Wildlife (CDFW); Office of Spill Prevention and Response (OSPR); 1700 K Street; Sacramento, CA 95814 “Oil Spill Incident Tracking [Ds394].” Accessed March 6, 2022. https://gis.data.ca.gov/datasets/7464e3d6f4924b50ad06e5a553d71086_0/explore?location=36.661875,-119.422009,6.00.
+
+
