@@ -19,7 +19,7 @@ navbar:
       - text: "Publications"
         href: publications.html
       - text: "CV"
-        href: 'CJ_CV_11_30_2021.pdf'
+        href: 'CJ_CV.pdf'
         target: '_blank'
 output: distill::distill_article
 
